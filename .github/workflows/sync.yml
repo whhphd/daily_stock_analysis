@@ -1,0 +1,25 @@
+name: Scheduled Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天北京时间上午 8 点运行一次
+  workflow_dispatch:      # 允许手动触发同步
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Upstream
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+        with:
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_repository: ZhuLinsen/daily_stock_analysis
+          upstream_branch: main
+          target_branch: main
+          test_mode: false
