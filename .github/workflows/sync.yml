@@ -2,8 +2,8 @@ name: Scheduled Sync
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天北京时间上午 8 点运行一次
-  workflow_dispatch:      # 允许手动触发同步
+    - cron: '0 0 * * *' # 每天北京时间上午 8 点运行
+  workflow_dispatch:      # 允许手动触发
 
 jobs:
   sync:
@@ -11,15 +11,13 @@ jobs:
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v3
-        with:
-          ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync Upstream
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
           target_repo_token: ${{ secrets.GITHUB_TOKEN }}
-          upstream_repository: ZhuLinsen/daily_stock_analysis
-          upstream_branch: main
-          target_branch: main
+          # 注意：以下参数名已更新
+          upstream_sync_repo: ZhuLinsen/daily_stock_analysis
+          upstream_sync_branch: main
+          target_sync_branch: main
           test_mode: false
